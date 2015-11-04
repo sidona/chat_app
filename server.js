@@ -9,6 +9,7 @@ var flash=require("connect-flash");
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var stylus=require('stylus');
+var cors = require('cors');
 var app = express();
 
 var controllers=require("./controllers");
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({secret:"PluralsightTheBoard"}));
 app.use(flash());
+app.use(cors());
 
 app.use(stylus.middleware({
   src:__dirname + "/public",
@@ -55,16 +57,6 @@ app.get("/api/users", function (req, res) {
   });
 });
 
-/*app.get("/api/sql", function (req, res) {
-  var msnodesql = require("msnodesql");
-  var connString = "Driver={SQL Server Native Client 10.0};Server=.\\sqlexpress12;Database=Northwind;Trusted_Connection={Yes}";
-
-  msnodesql.query(connString, "SELECT * FROM Customers WHERE CustomerID = 'ALFKI'", function (err, results) {
-    // Error Handling
-    res.send(results);
-  });
-});
-*/
 var server = http.createServer(app);
 
 server.listen(3000);

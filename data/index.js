@@ -19,7 +19,7 @@
         });
       }
     })
-  }
+  };
 
   data.getChatRoom = function (next) {
     //next(null, seedData.initialNotes);
@@ -47,7 +47,7 @@
         db.chat.findOne({nameRoom: nameRoom}, next);
       }
     })
-  }
+  };
 
   data.addMsg = function (nameRoom, msgToInsert, next) {
     database.getDb(function (err, db) {
@@ -57,27 +57,22 @@
         db.chat.update({nameRoom: nameRoom}, {$push: {chat: msgToInsert}}, next);
       }
     })
-  }
-  data.createNewRoom = function (nameRoom, next) {
+  };
+
+  data.createNewRoom = function (room, next) {
     //console.dir(nameRoom);
     database.getDb(function (err, db) {
       if (err) {
         next(err, null);
       } else {
         //verify if categories exist
-        db.chat.find({nameRoom: nameRoom}).toArray(function (err, results) {
+        db.chat.find({nameRoom: room.nameRoom}).count(function (err, count) {
           if (err) {
-            next(err, null);
+            next(err,null);
           } else {
-            //console.dir(results);
-            if (results.length) {
-             next("room exist", null);
-            } else {
-            //  //console.dir(err,"results",results);
-             var room = {
-                nameRoom: nameRoom,
-                chat: []
-              };
+            if (count!=0) {
+              next("category exist",null)
+            }else{
               db.chat.insert(room, function (err) {
                 if (err) {
                   next(err)
@@ -92,6 +87,7 @@
     });
   };
 
+
   data.addUser = function (user, next) {
     database.getDb(function (err, db) {
       if (err) {
@@ -102,7 +98,7 @@
       }
     })
 
-  }
+  };
 
   data.getUser = function (username, next) {
     database.getDb(function (err, db) {
@@ -114,7 +110,7 @@
       }
     })
   };
-  /*function seedDatabase() {
+  function seedDatabase() {
     database.getDb(function (err, db) {
       if (err) {
         console.log("failed to seed database " + err);
@@ -128,10 +124,10 @@
           }
           else {
             if (count == 0) {
-              console.log("seeding database")
+              console.log("seeding database");
               seedData.initialChat.forEach(function (item) {
                 db.chat.insert(item, function (err) {
-                  if (err) console.log("failed to insert note")
+                  if (err) console.log("failed to insert chat")
                 })
               })
             }
@@ -146,5 +142,6 @@
     })
   }
 
-  seedDatabase();*/
-})(module.exports);
+  seedDatabase();
+})
+(module.exports);

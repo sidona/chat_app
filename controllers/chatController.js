@@ -4,78 +4,67 @@
   var data = require("../data");
   var auth = require("../auth");
 
-  chatController.init  = function (app) {
+  chatController.init = function (app) {
 
-    app.get("/api/chat",
-
-      function (req, res) {
-
-        var nameRoom = req.params.nameRoom;
-
-        data.getRoom(nameRoom, function (err, results) {
-          if (err) {
-            res.send(400, err);
-          } else {
-            //res.set("Content-Type", "application/json");
-            res.json(results);
-          }
-        });
+    app.get("/api/chat", function (req, res) {
+      var nameRoom = req.params.nameRoom;
+      data.getRoom(nameRoom, function (err, results) {
+        if (err) {
+          res.send(400, err);
+        } else {
+          res.json(results);
+        }
       });
-    app.post("/api/chat",
+    });
 
-      function (req, res) {
+    app.post("/api/chat", function (req, res) {
+      var room = {
+        nameRoom: req.body.nameRoom,
+        chat: []
+      };
+      data.createNewRoom(room, function (err, results) {
+        if (err) {
+          res.send(400, err);
+        } else {
+          //res.set("Content-Type", "application/json");
+          res.send(
+            (err === null) ? {msg: ''} : {msg: 'Error updating movie: ' + err}
+          )
 
-        var nameRoom = req.params.nameRoom;
-          console.dir(nameRoom)
-        data.createNewRoom(nameRoom, function (err, results) {
-          if (err) {
-            res.send(400, err);
-          } else {
-            //res.set("Content-Type", "application/json");
-            res.json(results);
-          }
-        });
+        }
       });
+    });
 
-
-    app.get("/api/chat/:nameRoom",
-
-      function (req, res) {
-
-        var nameRoom = req.params.nameRoom;
-
-        data.getMsg(nameRoom, function (err, results) {
-          if (err) {
-            res.send(400, err);
-          } else {
-            res.set("Content-Type", "application/json");
-            //res.send(chat.chat);
-            res.json(results)
-          }
-        });
+    app.get("/api/chat/:nameRoom", function (req, res) {
+      var nameRoom = req.params.nameRoom;
+      data.getMsg(nameRoom, function (err, results) {
+        if (err) {
+          res.send(400, err);
+        } else {
+          res.set("Content-Type", "application/json");
+          //res.send(chat.chat);
+          res.json(results)
+        }
       });
+    });
 
-    app.post("/api/chat/:nameRoom",
-      function (req, res) {
+    app.post("/api/chat/:nameRoom", function (req, res) {
+      var nameRoom = req.params.nameRoom;
+      var msgToInsert = {
+        msg: req.body.msg,
+        //author: req.user.username
+      };
 
-        var nameRoom = req.params.nameRoom;
-
-        var msgToInsert = {
-          msg: req.body.msg,
-          author: req.user.username
-        };
-
-        data.addMsg(nameRoom, msgToInsert, function (err) {
-          if (err) {
-            res.send(400, "Failed to add note to data store");
-          } else {
-            res.set("Content-Type", "application/json");
-            res.send(201, msgToInsert);
-          }
-        });
-
+      data.addMsg(nameRoom, msgToInsert, function (err, results) {
+        if (err) {
+          res.send(400, "Failed to add chat to data store");
+        } else {
+          res.set("Content-Type", "application/json");
+          //res.send(201, msgToInsert);
+          res.json(results)
+        }
       });
-
+    });
   };
 
 })(module.exports);
