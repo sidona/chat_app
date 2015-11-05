@@ -5,17 +5,21 @@ var http = require("http");
 var _ = require("underscore");
 var bodyParser = require('body-parser');
 var express = require("express");
-var flash=require("connect-flash");
+var flash = require("connect-flash");
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var stylus=require('stylus');
+var stylus = require('stylus');
 var cors = require('cors');
 var app = express();
 
-var controllers=require("./controllers");
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
+
+var controllers = require("./controllers");
 //var ejsEngine=require("ejs-locals");
-function compile(str,path){
-  return stylus(str).set('filename',path);
+function compile(str, path) {
+  return stylus(str).set('filename', path);
 }
 
 app.set("view engine", "jade");
@@ -27,13 +31,13 @@ app.set("view engine", "jade");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(session({secret:"PluralsightTheBoard"}));
+app.use(session({secret: "PluralsightTheBoard"}));
 app.use(flash());
 app.use(cors());
 
 app.use(stylus.middleware({
-  src:__dirname + "/public",
-  compile:compile
+  src: __dirname + "/public",
+  compile: compile
 
 }))
 //set the public static resource folder
@@ -41,7 +45,7 @@ app.use(express.static(__dirname + "/public"));
 
 //use authentication
 
-var auth=require('./auth');
+var auth = require('./auth');
 auth.init(app);
 
 
@@ -57,9 +61,18 @@ app.get("/api/users", function (req, res) {
   });
 });
 
-var server = http.createServer(app);
+io.sockets.on("connection", function (socket) {
+  console.log("socket was connected");
+
+  socket.on("join msg", function (msg) {
+    socket.join(msg);
+    console.log(msg);
+  })
+  socket.on("newMsg", function (data) {
+    console.log(data);
+    socket.broadcast.to(data.nameRoom).emit("broadcast", data.msg);
+
+  })
+});
 
 server.listen(3000);
-
-var updater=require("./updater");
-updater.init(server);
