@@ -2,11 +2,30 @@
 (function (chatController) {
 
   var data = require("../data");
-  //var auth = require("../auth");
+  var jwt = require('jwt-simple');
+  //var User = require("../models/User.js");
+  //var auth = require("../services/localStrategy");
+
 
   chatController.init = function (app) {
 
+
+
     app.get("/api/chat", function (req, res) {
+
+      //var token=req.headers.authorization.split(' ')[1];
+      //var payload =jwt.decode(token,"shhh..")
+      //if (!payload.sub)
+      //  res.status(401).send({
+      //    message: 'Authentication failed'
+      //  });
+      //
+      //if (!req.headers.authorization) {
+      //  return res.status(401).send({
+      //    message: 'You are not authorized'
+      //  });
+      //}
+
       var nameRoom = req.params.nameRoom;
       data.getRoom(nameRoom, function (err, results) {
         if (err) {
@@ -14,6 +33,8 @@
         } else {
           res.json(results);
         }
+
+
       });
     });
 
@@ -51,8 +72,8 @@
     app.post("/api/chat/:nameRoom", function (req, res) {
       var nameRoom = req.params.nameRoom;
       var msgToInsert = {
-        msg: req.body.msg,
-        //author: req.user.username
+        msg: req.body.msg
+        //author: req.searchUser.email
       };
 
       data.addMsg(nameRoom, msgToInsert, function (err,results) {

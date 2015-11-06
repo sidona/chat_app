@@ -18,8 +18,8 @@
         } else {
           theDb = {
             db: db,
-            chat: db.collection("chat"),
-            users:db.collection("users")
+            chat: db.collection("chat")
+            //users:db.collection("users")
           };
           next(null, theDb);
         }

@@ -86,28 +86,28 @@
   };
 
 
-  data.addUser = function (user, next) {
-    database.getDb(function (err, db) {
-      if (err) {
-        console.log("failed to seed database " + err);
-      }
-      else {
-        db.users.insert(user, next);
-      }
-    })
-
-  };
-
-  data.getUser = function (username, next) {
-    database.getDb(function (err, db) {
-      if (err) {
-        next(err)
-      }
-      else {
-        db.users.findOne({username: username}, next)
-      }
-    })
-  };
+  //data.addUser = function (user, next) {
+  //  database.getDb(function (err, db) {
+  //    if (err) {
+  //      console.log("failed to seed database " + err);
+  //    }
+  //    else {
+  //      db.users.insert(user, next);
+  //    }
+  //  })
+  //
+  //};
+  //
+  //data.getUser = function (username, next) {
+  //  database.getDb(function (err, db) {
+  //    if (err) {
+  //      next(err)
+  //    }
+  //    else {
+  //      db.users.findOne({username: username}, next)
+  //    }
+  //  })
+  //};
   //function seedDatabase() {
   //  database.getDb(function (err, db) {
   //    if (err) {
