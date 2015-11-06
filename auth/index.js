@@ -77,10 +77,10 @@
     });
 
     app.get("/register", function (req, res) {
-      res.render("register", { title: "Register for The Board", message: req.flash("registrationError") });
+      res.render("register", { title: "Register ", message: req.flash("registrationError") });
     });
 
-    app.post("/register", function (req, res) {
+    app.post("/api/register", function (req, res) {
 
       var salt = hasher.createSalt();
 
@@ -88,14 +88,15 @@
         name: req.body.name,
         email: req.body.email,
         username: req.body.username,
-        passwordHash: hasher.computeHash(req.body.password, salt),
+        password: hasher.computeHash(req.body.password, salt),
         salt: salt
       };
 
       data.addUser(user, function (err) {
         if (err) {
           req.flash("registrationError", "Could not save user to database.");
-          res.redirect("/register");
+          //res.redirect("/register");
+          res.status(200).json({err:err})
         } else {
           res.redirect("/login");
         }

@@ -55,13 +55,13 @@
         //author: req.user.username
       };
 
-      data.addMsg(nameRoom, msgToInsert, function (err, results) {
+      data.addMsg(nameRoom, msgToInsert, function (err,results) {
         if (err) {
           res.send(400, "Failed to add chat to data store");
         } else {
           res.set("Content-Type", "application/json");
-          //res.send(201, msgToInsert);
-          res.json(results)
+          res.send(201, msgToInsert);
+         // res.json(results)
         }
       });
     });

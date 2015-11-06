@@ -6,7 +6,7 @@
 (function (database) {
 
   var mongodb = require("mongodb");
-  var mongoUrl = "mongodb://localhost:27017/socketApp";
+  var mongoUrl = "mongodb://localhost:27017/chatSocket";
   var theDb = null;
 
   database.getDb = function (next) {

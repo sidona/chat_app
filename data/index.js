@@ -22,12 +22,10 @@
   };
 
   data.getChatRoom = function (next) {
-    //next(null, seedData.initialNotes);
     database.getDb(function (err, db) {
       if (err) {
         next(err, null);
       } else {
-        //query in mongo .find({notes:{$not:{$size:5}}})
         db.chat.find().sort({nameRoom: 1}).toArray(function (err, results) {
           if (err) {
             next(err, null)
@@ -110,38 +108,38 @@
       }
     })
   };
-  function seedDatabase() {
-    database.getDb(function (err, db) {
-      if (err) {
-        console.log("failed to seed database " + err);
-      }
-      else {
-        //inseram ce avem in seeddata
-        //test to see if data exist
-        db.chat.count(function (err, count) {
-          if (err) {
-            console.log("failed to retrieve database count")
-          }
-          else {
-            if (count == 0) {
-              console.log("seeding database");
-              seedData.initialChat.forEach(function (item) {
-                db.chat.insert(item, function (err) {
-                  if (err) console.log("failed to insert chat")
-                })
-              })
-            }
-            else {
-              console.log("database already seedData")
-            }
-          }
-        })
-
-
-      }
-    })
-  }
-
-  seedDatabase();
+  //function seedDatabase() {
+  //  database.getDb(function (err, db) {
+  //    if (err) {
+  //      console.log("failed to seed database " + err);
+  //    }
+  //    else {
+  //      //inseram ce avem in seeddata
+  //      //test to see if data exist
+  //      db.chat.count(function (err, count) {
+  //        if (err) {
+  //          console.log("failed to retrieve database count")
+  //        }
+  //        else {
+  //          if (count == 0) {
+  //            console.log("seeding database");
+  //            seedData.initialChat.forEach(function (item) {
+  //              db.chat.insert(item, function (err) {
+  //                if (err) console.log("failed to insert chat")
+  //              })
+  //            })
+  //          }
+  //          else {
+  //            console.log("database already seedData")
+  //          }
+  //        }
+  //      })
+  //
+  //
+  //    }
+  //  })
+  //}
+  //
+  //seedDatabase();
 })
 (module.exports);

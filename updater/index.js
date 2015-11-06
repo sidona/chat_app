@@ -1,31 +1,21 @@
 /**
  * Created by sdonose on 10/21/2015.
  */
-(function(updater){
-  var socketio = require("socket.io");
+var io = require('socket.io');
+exports.initialize = function (server) {
+  io = io.listen(server);
 
+  io.sockets.on("connection",function(socket){
 
-    updater.init=function(server){
-      var io=socketio.listen(server);
+    //console.log("socket was connected");
 
-      io.sockets.on("connection",function(socket){
-      console.log("socket was connected");
-
-      socket.on("join msg", function(msg){
-        socket.join(msg);
-        console.log(msg);
-      })
-      socket.on("newMsg",function(data){
-        socket.broadcast.to(data.nameRoom).emit("broadcast",data.msg);
-
-      })
-
-      //socket.on('addMsg',function(msg){
-      //  io.emit('message',{
-      //    msg:'new message',
-      //    msg:msg
-      //  })
-      //})
+    socket.on("join", function(nameRoom){
+      socket.join(nameRoom);
     })
-  }
-})(module.exports)
+    socket.on("newMsg",function(data){
+      socket.broadcast.to(data.nameRoom).emit("broadcast",data.msg);
+      console.log(data.nameRoom,data.msg);
+    })
+
+  })
+}

@@ -3,42 +3,42 @@
  */
 (function (seedData){
 seedData.initialChat=[{
-  nameRoom: "History",
+  nameRoom: "history",
   chat: [{
     msg: "Testing history",
-    author: "sidona",
-    color: "yellow"
+    author: "sidona"
+
   }, {
     msg: "I like history",
-    author: "sidona",
-    color: "blue"
+    author: "sidona"
+
   }, {
     msg: "I hate war.",
-    author: "sidona",
-    color: "green"
+    author: "sidona"
+
   }, {
     msg: "History is an interesting subject with many different topics. I am always concerned about topics that are too long.",
-    author: "sidona",
-    color: "green"
+    author: "sidona"
+
   }, {
     msg: "Presidents are cool.",
-    author: "sidona",
-    color: "orange"
+    author: "sidona"
+
   }]
 }, {
-  nameRoom: "People",
+  nameRoom: "people",
   chat: [{
     msg: "Jefferson was a President",
-    author: "sidona",
-    color: "yellow"
+    author: "sidona"
+
   }, {
     msg: "John Wayne was an actor",
-    author: "sidona",
-    color: "blue"
+    author: "sidona"
+
   }, {
     msg: "Reagan was a President and an actor.",
-    author: "sidona",
-    color: "green"
+    author: "sidona"
+
   }]
 }];
 })(module.exports);

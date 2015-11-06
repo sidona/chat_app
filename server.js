@@ -13,7 +13,7 @@ var cors = require('cors');
 var app = express();
 
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+//var io = require('socket.io')(server);
 
 
 var controllers = require("./controllers");
@@ -61,18 +61,5 @@ app.get("/api/users", function (req, res) {
   });
 });
 
-io.sockets.on("connection", function (socket) {
-  console.log("socket was connected");
-
-  socket.on("join msg", function (msg) {
-    socket.join(msg);
-    console.log(msg);
-  })
-  socket.on("newMsg", function (data) {
-    console.log(data);
-    socket.broadcast.to(data.nameRoom).emit("broadcast", data.msg);
-
-  })
-});
-
 server.listen(3000);
+require('./updater/index.js').initialize(server);
