@@ -4,7 +4,7 @@
 (function (homeController) {
 
   var data = require("../data");
-  var auth = require("../auth")
+ // var auth = require("../auth")
 
   homeController.init = function (app) {
 
@@ -21,7 +21,9 @@
     });
 
 
-    app.get("/chat/:nameRoom", auth.ensureAuthenticated, function (req, res) {
+    app.get("/chat/:nameRoom",
+      //auth.ensureAuthenticated,
+      function (req, res) {
       var nameRoom = req.params.nameRoom;
       console.log(nameRoom);
       res.render("chat", {title: nameRoom, user: req.user});

@@ -2,7 +2,7 @@
 (function (chatController) {
 
   var data = require("../data");
-  var auth = require("../auth");
+  //var auth = require("../auth");
 
   chatController.init = function (app) {
 
