@@ -5,9 +5,12 @@
   var homeController=require("./homeController");
   var chatController=require("./chatController");
 
+
 controllers.init=function(app){
   homeController.init(app);
   chatController.init(app);
+
+
 };
 
 })(module.exports);

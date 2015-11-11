@@ -23,8 +23,12 @@ var createSendToken = require('./services/jwt.js');
 
 var app = express();
 
+
+require('./models/Post.js');
+
 var server = require('http').createServer(app);
-//var io = require('socket.io')(server);
+
+var posts = require('./routes/posts');
 
 
 var controllers = require("./controllers");
@@ -57,6 +61,7 @@ app.use(cookieParser());
 app.use(session({secret: "chat"}));
 app.use(flash());
 //app.use(cors());
+app.use('/', posts);
 
 //app.use(stylus.middleware({
 //  src: __dirname + "/public",
@@ -90,60 +95,6 @@ passport.serializeUser(function (user, done) {
 //routes
 controllers.init(app);
 
-//app.post('/register', function (req, res) {
-//  //console.log(req.body);
-//
-//  var user = req.body;
-//
-//  var newUser = new User({
-//    email: user.email,
-//    password: user.password
-//  })
-//
-//
-//  newUser.save(function (err) {
-//    createSendToken(newUser, res);
-//  })
-//})
-//
-//app.post('/login', function (req, res) {
-//  req.user = req.body;
-//
-//  console.log(req.user);
-//
-//  var searchUser={
-//    email:req.user.email
-//  }
-//
-//  User.findOne(searchUser, function (err, user) {
-//    if (err) throw err
-//
-//    if(!user)
-//      return res.status(401).send({message:'wrong email or password'});
-//
-//    user.comparePasswords(req.user.password, function (err, isMatch) {
-//      if (err) throw err
-//
-//      if (!isMatch)
-//        return res.status(401).send({message:'wrong email or password'});
-//
-//      createSendToken(user, res);
-//    });
-//  })
-//})
-//
-//function createSendToken(user, res) {
-//
-//  var payload = {
-//    sub: user.id
-//  }
-//  var token = jwt.encode(payload, 'shhh....');
-//
-//  res.status(200).send({
-//    user: user.toJSON(),
-//    token: token
-//  });
-//}
 
 
 mongoose.connect('mongodb://localhost/chatSocket')

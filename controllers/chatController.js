@@ -3,28 +3,27 @@
 
   var data = require("../data");
   var jwt = require('jwt-simple');
-  //var User = require("../models/User.js");
+  var User = require("../services/localStrategy.js");
   //var auth = require("../services/localStrategy");
 
 
   chatController.init = function (app) {
 
 
-
     app.get("/api/chat", function (req, res) {
-
-      //var token=req.headers.authorization.split(' ')[1];
-      //var payload =jwt.decode(token,"shhh..")
-      //if (!payload.sub)
-      //  res.status(401).send({
-      //    message: 'Authentication failed'
-      //  });
-      //
-      //if (!req.headers.authorization) {
+      //if (req.headers.authorization) {
+      //  var token = req.headers.authorization.split(' ')[1];
+      //  var payload = jwt.decode(token, "shhh..")
+      //  if (!payload.sub)
+      //    res.status(401).send({
+      //      message: 'Authentication failed'
+      //    });
+      //} else {
       //  return res.status(401).send({
       //    message: 'You are not authorized'
       //  });
       //}
+
 
       var nameRoom = req.params.nameRoom;
       data.getRoom(nameRoom, function (err, results) {
@@ -39,6 +38,7 @@
     });
 
     app.post("/api/chat", function (req, res) {
+
       var room = {
         nameRoom: req.body.nameRoom,
         chat: []
@@ -70,19 +70,21 @@
     });
 
     app.post("/api/chat/:nameRoom", function (req, res) {
+      //var token = req.headers.authorization.split(' ')[1];
+      //var payload = jwt.decode(token, "shhh..")
       var nameRoom = req.params.nameRoom;
       var msgToInsert = {
-        msg: req.body.msg
-        //author: req.searchUser.email
+        msg: req.body.msg,
+       // author: req.user.email
       };
 
-      data.addMsg(nameRoom, msgToInsert, function (err,results) {
+      data.addMsg(nameRoom, msgToInsert, function (err, results) {
         if (err) {
           res.send(400, "Failed to add chat to data store");
         } else {
           res.set("Content-Type", "application/json");
           res.send(201, msgToInsert);
-         // res.json(results)
+          // res.json(results)
         }
       });
     });
