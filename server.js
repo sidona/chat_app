@@ -15,16 +15,19 @@ var User = require('./models/User.js');
 var jwt = require('jwt-simple');
 var passport = require('passport');
 var localStrategy = require('./services/localStrategy.js');
+var expressJwt=require('express-jwt');
 
+var secret="shhh.."
 
 var createSendToken = require('./services/jwt.js');
-
+//var jwtSecret='fjksdksdskmdsk296300/3dAD'
 
 
 var app = express();
 
 
 require('./models/Post.js');
+//require('./models/Comments.js')
 
 var server = require('http').createServer(app);
 
@@ -61,6 +64,8 @@ app.use(cookieParser());
 app.use(session({secret: "chat"}));
 app.use(flash());
 //app.use(cors());
+
+//app.use(expressJwt({secret:secret}).unless({path:['/login','/register']}));
 app.use('/', posts);
 
 //app.use(stylus.middleware({
@@ -71,6 +76,7 @@ app.use('/', posts);
 //set the public static resource folder
 app.use(express.static(__dirname + "/public"));
 app.use(passport.initialize());
+
 
 passport.use('local-register', localStrategy.register);
 passport.use('local-login', localStrategy.login);
