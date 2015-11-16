@@ -13,7 +13,7 @@ exports.initialize = function (server) {
       socket.join(nameRoom);
     })
     socket.on("newMsg",function(data){
-      socket.broadcast.to(data.nameRoom).emit("broadcast",data.msg);
+      socket.broadcast.to(data.nameRoom).emit("broadcast",data.msg,data.author);
       console.log(data.nameRoom,data.msg);
     })
 

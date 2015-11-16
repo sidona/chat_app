@@ -2,34 +2,21 @@
  * Created by sdonose on 11/11/2015.
  */
 
-'use strict'
+'use strict';
 
 var mongoose = require('mongoose');
 var CommentSchema = new mongoose.Schema({
-
-  content: String
-
-  //post:{type:mongoose.Schema.Types.ObjectId, ref:'Post'}
-})
+  content: String,
+  author: String,
+  created_at: {type: Date}
+});
 
 var PostSchema = new mongoose.Schema({
   title: String,
   content: String,
   created_at: {type: Date},
-  author : String,
-  // user: {type: String, required:true},
-  comments: [{
-    content: String
-  }]
-})
+  author: String,
+  comments: [CommentSchema]
+});
 
-PostSchema.pre('save', function (next) {
-  var now = new Date();
-  var self = this;
-  this.created_at = now;
-
-  next();
-})
-
-
-mongoose.model('Post', PostSchema)
+mongoose.model('Post', PostSchema);

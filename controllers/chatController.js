@@ -11,19 +11,6 @@
 
 
     app.get("/api/chat", function (req, res) {
-      //if (req.headers.authorization) {
-      //  var token = req.headers.authorization.split(' ')[1];
-      //  var payload = jwt.decode(token, "shhh..")
-      //  if (!payload.sub)
-      //    res.status(401).send({
-      //      message: 'Authentication failed'
-      //    });
-      //} else {
-      //  return res.status(401).send({
-      //    message: 'You are not authorized'
-      //  });
-      //}
-
 
       var nameRoom = req.params.nameRoom;
       data.getRoom(nameRoom, function (err, results) {
@@ -41,7 +28,8 @@
 
       var room = {
         nameRoom: req.body.nameRoom,
-        chat: []
+        chat: [],
+        author:req.body.author
       };
       data.createNewRoom(room, function (err, results) {
         if (err) {
@@ -70,12 +58,11 @@
     });
 
     app.post("/api/chat/:nameRoom", function (req, res) {
-      //var token = req.headers.authorization.split(' ')[1];
-      //var payload = jwt.decode(token, "shhh..")
+
       var nameRoom = req.params.nameRoom;
       var msgToInsert = {
         msg: req.body.msg,
-       // author: req.user.email
+        author: req.body.author
       };
 
       data.addMsg(nameRoom, msgToInsert, function (err, results) {
