@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var Post = mongoose.model('Post');
 var User = mongoose.model('User');
 
+
 router.param('postId', function (req, res, next, postId) {
   Post.findById(postId, function (err, post) {
     console.log('THE POST ID IS: ', postId);
@@ -16,8 +17,33 @@ router.param('postId', function (req, res, next, postId) {
   });
 });
 
+router.get('/profile/:id', function (req, res) {
+  User.findOne({'_id': Object(req.params.id)}, function (err, results) {
+    res.json(results);
+  })
+});
+
+
+router.put('/profile/:id',function(req,res){
+  var user=new User(req.body);
+  var profile=req.body;
+  User.findByIdAndUpdate({'_id':Object(req.params.id)},{$set: {profile:req.body}},
+    function (err, result) {
+      res.send(
+        (err === null) ? {msg: ''} : {msg: 'Error updating movie: ' + err}
+      )
+    })
+
+})
+
+router.get('/users', function (req, res) {
+  User.find(function (err, users) {
+    res.json(users);
+  });
+});
 
 router.get('/post', function (req, res) {
+
   Post.find(function (err, posts) {
     res.json(posts);
   });
