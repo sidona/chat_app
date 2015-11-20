@@ -18,13 +18,13 @@ router.param('postId', function (req, res, next, postId) {
 });
 
 router.get('/profile/:id', function (req, res) {
-  User.findOne({'_id': Object(req.params.id)}, function (err, results) {
+  User.findById({'_id': Object(req.params.id)}, function (err, results) {
     res.json(results);
   })
 });
 
 
-router.put('/profile/:id',function(req,res){
+router.post('/profile/:id',function(req,res){
   var user=new User(req.body);
   var profile=req.body;
   User.findByIdAndUpdate({'_id':Object(req.params.id)},{$set: {profile:req.body}},

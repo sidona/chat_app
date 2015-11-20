@@ -9,6 +9,7 @@ var strategyOptions = {
   usernameField: 'email'
 };
 
+
 exports.login = new LocalStrategy(strategyOptions, function (email, password, done) {
 
 
