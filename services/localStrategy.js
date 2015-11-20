@@ -1,6 +1,6 @@
 var User = require('../models/User.js');
 var LocalStrategy = require('passport-local').Strategy;
-var config=require('./config.js')
+
 
 
 var _ = require('lodash');

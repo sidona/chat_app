@@ -51,7 +51,7 @@ app.use(function(req, res, next) {
 
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
 
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization,x-access-token');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   next();
 
@@ -86,7 +86,16 @@ app.post('/login', passport.authenticate('local-login'), function (req, res) {
 
 });
 
-
+app.post('/upload',function(req,res,next){
+  var files=req.files.file.map(function(file){
+    return{
+      name:file.name,
+      size:file.size
+    }
+  });
+  console.log(files)
+  res.send(200,files)
+})
 
 
 
