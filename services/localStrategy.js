@@ -2,17 +2,12 @@ var User = require('../models/User.js');
 var LocalStrategy = require('passport-local').Strategy;
 
 
-
-var _ = require('lodash');
-
 var strategyOptions = {
   usernameField: 'email'
 };
 
 
 exports.login = new LocalStrategy(strategyOptions, function (email, password, done) {
-
-
   var searchUser = {
     email: email
   };
@@ -24,15 +19,12 @@ exports.login = new LocalStrategy(strategyOptions, function (email, password, do
       message: 'Wrong email/password'
     });
 
-
-
     user.comparePasswords(password, function (err, isMatch) {
       if (err) return done(err);
 
       if (!isMatch) return done(null, false, {
         message: 'Wrong email/password'
       });
-
 
       return done(null, user);
     });

@@ -16,7 +16,7 @@ var cors=require('cors');
 var passport = require('passport');
 var localStrategy = require('./services/localStrategy.js');
 var emailVerification = require('./services/emailVerification.js');
-
+var path=require('path');
 
 var createSendToken = require('./services/jwt.js');
 
@@ -62,55 +62,42 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({secret: "chat"}));
 app.use(flash());
+
+
 //app.use(cors());
 
-app.use('/', posts);
-
 //set the public static resource folder
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 
 
 passport.use('local-register', localStrategy.register);
 passport.use('local-login', localStrategy.login);
 
+app.post('/login', passport.authenticate('local-login'), function (req, res) {
+  createSendToken(req.user, res);
+  console.log('req.user',req.user)
+});
+
 app.post('/register', passport.authenticate('local-register'), function (req, res) {
   emailVerification.send(req.user.email);
   createSendToken(req.user, res);
 });
 
-app.post('/login', passport.authenticate('local-login'), function (req, res) {
-  createSendToken(req.user, res);
-
-  console.log('req.user',req.user)
-
-});
-
-app.post('/upload',function(req,res,next){
-  var files=req.files.file.map(function(file){
-    return{
-      name:file.name,
-      size:file.size
-    }
-  });
-  console.log(files)
-  res.send(200,files)
-})
-
-
-
 app.get('/verifyEmail', emailVerification.handler);
 //use authentication
+
+app.use('/', posts);
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-//passport.deserializeUser(function(id, done) {
-//  User.findById(id, function(err, user) {
-//    done(err, user);
-//  });
-//});
+passport.deserializeUser(function(id, done) {
+  User.findOne({_id:id},'password -salt', function(err, user) {
+    done(err, user);
+  });
+});
 
 //routes
 controllers.init(app);
